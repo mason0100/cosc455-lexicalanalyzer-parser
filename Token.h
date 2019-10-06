@@ -17,14 +17,17 @@ private:
 	vector<string> idTable;
 
 	struct token {
-		int idNumber; // the index of the created toke will be assigned to this value
-		string tokenId; 
+		int tokenPosition; // the index of the created toke will be assigned to this value
+		string type; // ID , NUM , not, true , false , _ , +, -, / , * , + , <
 		
-		//values
-		int numValue; // for num tokens
-		string strValue; // for identity tokens
-		string keywordValue; // for keyword tokens
-		int idTableIndex; // for identity 
+		//values, only ID and NUM tokens will be assigned a value
+		int numValue = NULL; // for num tokens
+		string IdValue = NULL; // for identity tokens
+		
+
+		//Postion Variables
+		int lineNumber;
+		int linePosition;// Position of first character of the lexem
 
 		};
 
@@ -33,9 +36,9 @@ private:
 public:
 
 	Token();
-	void addNumToken(string numStr);
-	void addKeywordToken(string keywordStr);
-	void addIdentifierToken(string idStr);
+	void addNumToken(string numStr, int lineNum, int start);
+	void addKeywordToken(string keywordStr, int lineNum, int start);
+	void addIdentifierToken(string idStr, int lineNum, int start);
 	void addEndOFDocToken();
 	void tokenListToString();
 

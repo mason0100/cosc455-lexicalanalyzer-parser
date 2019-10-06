@@ -15,13 +15,18 @@ Automaton::~Automaton() {
 
 
 //this is the function that identifies the tokens 
-void Automaton::identifyChar(string line, int lineNumber) {
+void Automaton::identifyChar(string line, int lineNumber, bool &error) {
+
+	//Inititate the test boolean for token eveluation
+	bool test;
 
 	//start and read will point to index numbers on the char[] array for the string line
 	int start = 0;
 	int read = 0; 
+
 	//will skip if the line is blank
 	if (line != "") {
+
 		//processes until read == line.length 
 		while(read < line.length()) {
 			char c = line[read];
@@ -31,32 +36,32 @@ void Automaton::identifyChar(string line, int lineNumber) {
 				//insert function to test for white space
 				break;
 			case '=':
-				bool test = isEqualsSymbol(line, start, read);
+				test = isEqualsSymbol(line, start, read);
 				evaluate(test, start, read);
 				//insert function
 				break;
 			case '<':
-				bool test = isLessThanSymbol(line, start, read);
+				test = isLessThanSymbol(line, start, read);
 				evaluate(test, start, read);
 				//insert function
 				break;
 			case '+':
-				bool test = isPlusSymbol(line, start, read);
+				test = isPlusSymbol(line, start, read);
 				evaluate(test, start, read);
 				//insert function
 				break;
 			case '-':
-				bool test = isMinusSymbol(line, start, read);
+				test = isMinusSymbol(line, start, read);
 				evaluate(test, start, read);
 				//insert function
 				break;
 			case '*':
-				bool test = isMultiplicationSymbol(line, start, read);
+				test = isMultiplicationSymbol(line, start, read);
 				evaluate(test, start, read);
 				//insert function
 				break;
 			case '/':
-				bool test = isCommentSymbol(line, start, read);
+				test = isCommentSymbol(line, start, read);
 				if (test == true) {
 					evaluate(test, start, read);
 				}
@@ -67,12 +72,12 @@ void Automaton::identifyChar(string line, int lineNumber) {
 				//insert function, must test for comment out and '/' keyword
 				break;
 			case '_':
-				bool test = isUnderscoreSymbol(line, start, read);
+				test = isUnderscoreSymbol(line, start, read);
 				evaluate(test, start, read);
 				//insert function
 				break;
 			case 'f':
-				bool test = isNot(line, start, read);
+				test = isNot(line, start, read);
 				if (test == true) {
 					evaluate(test, start, read);
 				}
@@ -84,7 +89,7 @@ void Automaton::identifyChar(string line, int lineNumber) {
 				//insert function to test for "false"
 				break;
 			case 't':
-				bool test = isTrue(line, start, read);
+				test = isTrue(line, start, read);
 				if (test == true) {
 					evaluate(test, start, read);
 				}
@@ -95,7 +100,7 @@ void Automaton::identifyChar(string line, int lineNumber) {
 				//insert function to test for "true"
 				break;
 			case 'n':
-				bool test = isNot(line, start, read);
+				test = isNot(line, start, read);
 				if (test == true) {
 					evaluate(test, start, read);
 				}
@@ -157,7 +162,7 @@ void Automaton::identifyChar(string line, int lineNumber) {
 			case 'X':
 			case 'Y':
 			case 'Z':
-				bool test = isIdentifier(line, start, read);
+				test = isIdentifier(line, start, read);
 				evaluate(test, start, read);
 				//function for identifiie goes here
 				break;
@@ -171,7 +176,7 @@ void Automaton::identifyChar(string line, int lineNumber) {
 			case '7':
 			case '8':
 			case '9':
-				bool test = isNumber(line, start, read);
+				test = isNumber(line, start, read);
 				evaluate(test, start, read);
 				//function for Integral Literal goes here
 				break;
@@ -249,16 +254,6 @@ bool Automaton::isCommentSymbol(string line, int& start, int& read) {
 				read++;
 				return true;
 			}
-			else {
-				//set read to equal start for isDivisionSymbol() function to evaluate
-				read = start;
-				return false;
-			}
-		}
-		else {
-			//set read to equal start for isDivisionSymbol() function to evaluate
-			read = start;
-			return false;
 		}
 	}
 	//set read to equal start for isDivisionSymbol() function to evaluate

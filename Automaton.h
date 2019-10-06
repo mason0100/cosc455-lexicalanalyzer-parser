@@ -13,7 +13,7 @@ class Automaton
 public:
 	Automaton();//constructor
 	~Automaton();//Deconstructor
-	void identifyChar(string line, int lineNumber);//Driver function
+	void identifyChar(string line, int lineNumber, bool &error);//Driver function
 	
 
 //private:
