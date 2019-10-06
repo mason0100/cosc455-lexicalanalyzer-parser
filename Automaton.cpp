@@ -31,43 +31,78 @@ void Automaton::identifyChar(string line, int lineNumber) {
 				//insert function to test for white space
 				break;
 			case '=':
-				isEqualsSymbol(line, start, read);
+				bool test = isEqualsSymbol(line, start, read);
+				evaluate(test, start, read);
 				//insert function
 				break;
 			case '<':
-				isLessThanSymbol(line, start, read);
+				bool test = isLessThanSymbol(line, start, read);
+				evaluate(test, start, read);
 				//insert function
 				break;
 			case '+':
-				isPlusSymbol(line, start, read);
+				bool test = isPlusSymbol(line, start, read);
+				evaluate(test, start, read);
 				//insert function
 				break;
 			case '-':
-				isMinusSymbol(line, start, read);
+				bool test = isMinusSymbol(line, start, read);
+				evaluate(test, start, read);
 				//insert function
 				break;
 			case '*':
-				isMultiplicationSymbol(line, start, read);
+				bool test = isMultiplicationSymbol(line, start, read);
+				evaluate(test, start, read);
 				//insert function
 				break;
 			case '/':
-				isDivisionSymbol(line, start, read);
+				bool test = isCommentSymbol(line, start, read);
+				if (test == true) {
+					evaluate(test, start, read);
+				}
+				else {// test == false
+					test = isDivisionSymbol(line, start, read);
+					evaluate(test, start, read);
+				}
 				//insert function, must test for comment out and '/' keyword
 				break;
 			case '_':
-				isUnderscoreSymbol(line, start, read);
+				bool test = isUnderscoreSymbol(line, start, read);
+				evaluate(test, start, read);
 				//insert function
 				break;
 			case 'f':
-				isNot(line, start, read);
+				bool test = isNot(line, start, read);
+				if (test == true) {
+					evaluate(test, start, read);
+				}
+				else {// test == false
+					test = isIdentifier(line, start, read);
+					evaluate(test, start, read);
+				}
+				
 				//insert function to test for "false"
 				break;
 			case 't':
-				isTrue(line, start, read);
+				bool test = isTrue(line, start, read);
+				if (test == true) {
+					evaluate(test, start, read);
+				}
+				else {// test == false
+					test = isIdentifier(line, start, read);
+					evaluate(test, start, read);
+				}
 				//insert function to test for "true"
 				break;
 			case 'n':
-				isNot(line, start, read);
+				bool test = isNot(line, start, read);
+				if (test == true) {
+					evaluate(test, start, read);
+				}
+				else {// test == false
+					test = isIdentifier(line, start, read);
+					evaluate(test, start, read);
+				}
 				//insert function to test for "not"
 				break;
 			case 'a':
@@ -122,7 +157,8 @@ void Automaton::identifyChar(string line, int lineNumber) {
 			case 'X':
 			case 'Y':
 			case 'Z':
-				isIdentifier(line, start, read);
+				bool test = isIdentifier(line, start, read);
+				evaluate(test, start, read);
 				//function for identifiie goes here
 				break;
 			case '0':
@@ -135,7 +171,8 @@ void Automaton::identifyChar(string line, int lineNumber) {
 			case '7':
 			case '8':
 			case '9':
-				isNumber(line, start, read);
+				bool test = isNumber(line, start, read);
+				evaluate(test, start, read);
 				//function for Integral Literal goes here
 				break;
 			
@@ -199,10 +236,41 @@ bool Automaton::isMultiplicationSymbol(string line, int& start, int& read) {
 }
 
 
-//Returns true if token is '/'
+//Returns true if token is '//'
+bool Automaton::isCommentSymbol(string line, int& start, int& read) {
+	char token = line.at(start);
+	int peak = read + 1;
+
+	if (isForwardSlash(token) == true) {
+		//checks is line.size() is large enough to have a comment keyword
+		if (line.size() > peak) {
+			token = line.at(peak);
+			if (isForwardSlash(token) == true) {
+				read++;
+				return true;
+			}
+			else {
+				//set read to equal start for isDivisionSymbol() function to evaluate
+				read = start;
+				return false;
+			}
+		}
+		else {
+			//set read to equal start for isDivisionSymbol() function to evaluate
+			read = start;
+			return false;
+		}
+	}
+	//set read to equal start for isDivisionSymbol() function to evaluate
+	read = start;
+	return false;
+}
+
+
+//Returns true is token is '/'
 bool Automaton::isDivisionSymbol(string line, int& start, int& read) {
-	char token = line.at(read);
-	if (token == '*') {
+	char token = line.at(start);
+	if (isForwardSlash(token) == true) {
 		return true;
 	}
 	return false;
@@ -213,21 +281,24 @@ bool Automaton::isDivisionSymbol(string line, int& start, int& read) {
 //If the functions returns false, the read array pointer will be reset back to the start value
 //Identifier will then be called to test is substring is an identfier token
 bool Automaton::isFalse(string line, int& start, int& read) {
-	if (line.at(read) == 'f') {
-		read++;
-		if (line.at(read) == 'a') {
+	//checks if the line string has enough characters to have 'false' in it
+	if (line.size() > read+4) {
+		if (line.at(read) == 'f') {
 			read++;
-			if (line.at(read) == 'l') {
+			if (line.at(read) == 'a') {
 				read++;
-				if (line.at(read) == 's') {
+				if (line.at(read) == 'l') {
 					read++;
-					if (line.at(read) == 'e') {
-						//does not increment read because this is the end of the token
-						return true;
+					if (line.at(read) == 's') {
+						read++;
+						if (line.at(read) == 'e') {
+							//does not increment read because this is the end of the token
+							return true;
+						}
 					}
-				}	
-			}	
-		}	
+				}
+			}
+		}
 	}
 	//if the token is not 'false' read is reset and made equal to start for the isIdentfier() function
 	read = start;
@@ -239,14 +310,17 @@ bool Automaton::isFalse(string line, int& start, int& read) {
 //If the functions returns false, the read array pointer will be reset back to the start value
 //Identifier will then be called to test is substring is an identfier token
 bool Automaton::isTrue(string line, int& start, int& read) {
-	if (line.at(read) == 't') {
-		read++;
-		if (line.at(read) == 'r') {
+	//checks if the line string has enough characters to have 'true' in it
+	if (line.size() > read+3){
+		if (line.at(read) == 't') {
 			read++;
-			if (line.at(read) == 'u') {
+			if (line.at(read) == 'r') {
 				read++;
-				if (line.at(read) == 'e') {
-					return true;
+				if (line.at(read) == 'u') {
+					read++;
+					if (line.at(read) == 'e') {
+						return true;
+					}
 				}
 			}
 		}
@@ -261,12 +335,15 @@ bool Automaton::isTrue(string line, int& start, int& read) {
 //If the functions returns false, the read array pointer will be reset back to the start value
 //Identifier will then be called to test is substring is an identfier token
 bool Automaton::isNot(string line, int& start, int& read) {
-	if (line.at(read) == 'n'){
-		read++;
-		if (line.at(read) == 'o') {
+	//checks if the line string has enough characters to have 'not' in it
+	if(line.size() > read+2){
+		if (line.at(read) == 'n') {
 			read++;
-			if (line.at(read) == 't') {
-				return true;
+			if (line.at(read) == 'o') {
+				read++;
+				if (line.at(read) == 't') {
+					return true;
+				}
 			}
 		}
 	}
@@ -412,6 +489,15 @@ bool Automaton::isLetter(char token) {
 }
 
 
+//returns true if the char is a forward slash
+bool Automaton::isForwardSlash(char token) {
+	if (token == '/') {
+		return true;
+	}
+	return false;
+}
+
+
 //Returns true is char is a digit in the language
 //helper function
 bool Automaton::isDigit(char token) {
@@ -435,6 +521,19 @@ void Automaton::processWhiteSpace(string line, int &start, int &read) {
 	read++;
 	start = read;
 
-
 	cout << line[read] << endl;//for testing DELETE LATER
+}
+
+//Function decides whether to tokenize or mark error and exit program
+void Automaton::evaluate(bool test, int& start, int& read) {
+
+	if (test == true) {
+		//add to token list
+		//increment read to the next char to be read in the next driver loop
+		//set start = read 
+	}
+	else {//test == false
+		//exit program and mark error at line number and element position
+	}
+
 }
