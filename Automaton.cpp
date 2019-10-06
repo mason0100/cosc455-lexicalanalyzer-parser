@@ -6,6 +6,14 @@ Automaton::Automaton() {
 
 }
 
+
+//Deconstructor
+Automaton::~Automaton() {
+	cout << "Class is deleted" << endl;// for testing
+
+}
+
+
 //this is the function that identifies the tokens 
 void Automaton::identifyChar(string line, int lineNumber) {
 
@@ -22,35 +30,44 @@ void Automaton::identifyChar(string line, int lineNumber) {
 				processWhiteSpace(line, start, read);
 				//insert function to test for white space
 				break;
-			case '=': 
+			case '=':
+				isEqualsSymbol(line, start, read);
 				//insert function
 				break;
 			case '<':
+				isLessThanSymbol(line, start, read);
 				//insert function
 				break;
 			case '+':
+				isPlusSymbol(line, start, read);
 				//insert function
 				break;
 			case '-':
+				isMinusSymbol(line, start, read);
 				//insert function
 				break;
 			case '*':
+				isMultiplicationSymbol(line, start, read);
 				//insert function
 				break;
 			case '/':
+				isDivisionSymbol(line, start, read);
 				//insert function, must test for comment out and '/' keyword
 				break;
 			case '_':
-				isUnderscore(line, start, read);
+				isUnderscoreSymbol(line, start, read);
 				//insert function
 				break;
 			case 'f':
+				isNot(line, start, read);
 				//insert function to test for "false"
 				break;
 			case 't':
+				isTrue(line, start, read);
 				//insert function to test for "true"
 				break;
 			case 'n':
+				isNot(line, start, read);
 				//insert function to test for "not"
 				break;
 			case 'a':
@@ -131,21 +148,172 @@ void Automaton::identifyChar(string line, int lineNumber) {
 }//end identifyChar()
 
 
+
+//Returns true is the token is '='
+bool Automaton::isEqualsSymbol(string line, int& start, int& read) {
+	char token = line.at(read);
+	if (token == '=') {
+		return true; 
+	}
+	return false;
+}
+
+
+//Returns true if token is '<'
+bool Automaton::isLessThanSymbol(string line, int& start, int& read) {
+	char token = line.at(read);
+	if (token == '<') {
+		return true;
+	}
+	return false;
+}
+
+
+//Returns true if token is '+'
+bool Automaton::isPlusSymbol(string line, int& start, int& read) {
+	char token = line.at(read);
+	if (token == '+') {
+		return true;
+	}
+	return false;
+}
+
+
+//Returns true if token is '-'
+bool Automaton::isMinusSymbol(string line, int& start, int& read) {
+	char token = line.at(read);
+	if (token == '-') {
+		return true;
+	}
+	return false;
+}
+
+
+//Returns true if token is '*'
+bool Automaton::isMultiplicationSymbol(string line, int& start, int& read) {
+	char token = line.at(read);
+	if (token == '*') {
+		return true;
+	}
+	return false;
+}
+
+
+//Returns true if token is '/'
+bool Automaton::isDivisionSymbol(string line, int& start, int& read) {
+	char token = line.at(read);
+	if (token == '*') {
+		return true;
+	}
+	return false;
+}
+
+
+//Returns true for the false keyword
+//If the functions returns false, the read array pointer will be reset back to the start value
+//Identifier will then be called to test is substring is an identfier token
+bool Automaton::isFalse(string line, int& start, int& read) {
+	if (line.at(read) == 'f') {
+		read++;
+		if (line.at(read) == 'a') {
+			read++;
+			if (line.at(read) == 'l') {
+				read++;
+				if (line.at(read) == 's') {
+					read++;
+					if (line.at(read) == 'e') {
+						//does not increment read because this is the end of the token
+						return true;
+					}
+				}	
+			}	
+		}	
+	}
+	//if the token is not 'false' read is reset and made equal to start for the isIdentfier() function
+	read = start;
+	return false;
+}
+
+
+//Returns true for keyword 'true'
+//If the functions returns false, the read array pointer will be reset back to the start value
+//Identifier will then be called to test is substring is an identfier token
+bool Automaton::isTrue(string line, int& start, int& read) {
+	if (line.at(read) == 't') {
+		read++;
+		if (line.at(read) == 'r') {
+			read++;
+			if (line.at(read) == 'u') {
+				read++;
+				if (line.at(read) == 'e') {
+					return true;
+				}
+			}
+		}
+	}
+	//if the token is not 'true' read is reset and made equal to start for the isIdentfier() function
+	read = start;
+	return false;
+}
+
+
+//Returns true is keyword is 'not'
+//If the functions returns false, the read array pointer will be reset back to the start value
+//Identifier will then be called to test is substring is an identfier token
+bool Automaton::isNot(string line, int& start, int& read) {
+	if (line.at(read) == 'n'){
+		read++;
+		if (line.at(read) == 'o') {
+			read++;
+			if (line.at(read) == 't') {
+				return true;
+			}
+		}
+	}
+	//if the token is not 'not' read is reset and made equal to start for the isIdentfier() function
+	read = start;
+	return false;
+}
+
+
 //Returns true is a token is a number token
 bool Automaton::isNumber(string line, int& start, int& read){
 	char token = line.at(start);
 
-	if (isDigit(start) == false) {
+	if (isDigit(token) == false) {
 		return false;
 	}
 
+	int peak = read + 1;
+	
 	//set token to peak forward
-	token = line.at(read + 1);
+	if (line.size()-1 > read) {
+		token = line.at(peak);
+		//read++;
+	}
 
-	while (isDigit(token)) {
-		read++;
-		token = line.at(read + 1);
-	}	
+	while (true) {	
+		//If token is a number increment read to match token 
+		//or exit the loop
+		if (isDigit(token)) {
+			read++;
+			peak++;
+		}
+		else {
+			break;
+		}
+		//If line.size() > peak assign the peak char to token
+		//or exit the loop
+		if (line.size() > peak) {
+			token = line.at(peak);
+		}
+		else {
+			break;
+		}
+			
+		
+	}
+	return true;
 }
 
 
@@ -161,15 +329,33 @@ bool Automaton::isIdentifier(string line, int& start, int& read) {
 		return false;
 	}
 
-	//peak forward to see what the next token will be
-	token = line.at(read + 1);
+	int peak = read + 1;
 
-	//loops unil a char is found that is not in the identifier definition
-	while (isLetter(token) || isDigit(token) || isUnderscore(token)) {
-		read++;
-		token = line.at(read + 1);
+	//set token to peak forward
+	if (line.size() - 1 > read) {
+		token = line.at(peak);
+		//read++;
 	}
 
+	while (true) {
+		//If token is a number increment read to match token 
+		//or exit the loop
+		if (isLetter(token) || isDigit(token) || isUnderscore(token)) {
+			read++;
+			peak++;
+		}
+		else {
+			break;
+		}
+		//If line.size() > peak assign the peak char to token
+		//or exit the loop
+		if (line.size() > peak) {
+			token = line.at(peak);
+		}
+		else {
+			break;
+		}
+	}
 	//this funtion will return true after finding a char outside the identifier defintion
 	//the start and read array pointers will be permanently changed and the next function will 
 	//convert the substring between start and read
@@ -180,7 +366,7 @@ bool Automaton::isIdentifier(string line, int& start, int& read) {
 
 //Returns true if the char at postion is '_'
 //Written to go into the driver
-bool Automaton::isUnderscore(string line, int &start, int &read) {
+bool Automaton::isUnderscoreSymbol(string line, int &start, int &read){
 	char token = line.at(read);
 	if (isUnderscore(token)) {
 		return true;
