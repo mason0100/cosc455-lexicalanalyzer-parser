@@ -89,11 +89,6 @@ void Token::addEndOFDocToken() {
 	//Assign type
 	temp.type = "END";
 
-	//Token Value for num
-
-	//Postion
-	temp.lineNumber = NULL;
-	temp.linePosition = NULL;
 
 	//add to vector
 	tokenList.push_back(temp);

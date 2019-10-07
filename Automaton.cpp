@@ -37,17 +37,14 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case '=':
 				test = isEqualsSymbol(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
-				//insert function
 				break;
 			case '<':
 				test = isLessThanSymbol(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
-				//insert function
 				break;
 			case '+':
 				test = isPlusSymbol(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
-				//insert function
 				break;
 			case '-':
 				test = isMinusSymbol(line, start, read);
@@ -57,26 +54,23 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case '*':
 				test = isMultiplicationSymbol(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
-				//insert function
 				break;
 			case '/':
 				test = isCommentSymbol(line, start, read);
 				if (test == true) {
-					evaluateKeyword(test, line, lineNumber, start, read, error);
+					//need to exit line
 				}
 				else {// test == false
 					test = isDivisionSymbol(line, start, read);
 					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
-				//insert function, must test for comment out and '/' keyword
 				break;
 			case '_':
 				test = isUnderscoreSymbol(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
-				//insert function
 				break;
 			case 'f':
-				test = isNot(line, start, read);
+				test = isFalse(line, start, read);
 				if (test == true) {
 					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
@@ -84,8 +78,6 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 					test = isIdentifier(line, start, read);
 					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
-				
-				//insert function to test for "false"
 				break;
 			case 't':
 				test = isTrue(line, start, read);
@@ -96,7 +88,6 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 					test = isIdentifier(line, start, read);
 					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
-				//insert function to test for "true"
 				break;
 			case 'n':
 				test = isNot(line, start, read);
@@ -107,7 +98,6 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 					test = isIdentifier(line, start, read);
 					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
-				//insert function to test for "not"
 				break;
 			case 'a':
 			case 'b':
@@ -163,7 +153,6 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case 'Z':
 				test = isIdentifier(line, start, read);
 				evaluateIdentifier(test, line, lineNumber, start, read, error);
-				//function for identifiie goes here
 				break;
 			case '0':
 			case '1':
@@ -177,7 +166,6 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case '9':
 				test = isNumber(line, start, read);
 				evaluateNum(test, line, lineNumber, start, read, error);
-				//function for Integral Literal goes here
 				break;
 			
 			default:
@@ -188,6 +176,19 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 		}
 	}
 }//end identifyChar()
+
+
+//print token list
+void Automaton::printTokenList() {
+	lexem.printTokenList();
+}
+
+
+//This method will be called in the scanner function driver
+//when the text document has been read
+void Automaton::evaluateEndOfText() {
+	lexem.addEndOFDocToken();
+}
 
 
 
@@ -516,7 +517,6 @@ void Automaton::processWhiteSpace(string line, int &start, int &read) {
 	read++;
 	start = read;
 
-	cout << line[read] << endl;//for testing DELETE LATER
 }
 
 

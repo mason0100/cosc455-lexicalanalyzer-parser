@@ -15,9 +15,21 @@ public:
 	Automaton();//constructor
 	~Automaton();//Deconstructor
 	void identifyChar(string line, int lineNumber, bool &error);//Driver function
+
+	//Print token list
+	void printTokenList();
+
+	//This method will be called in the scanner function driver
+	//when the text document has been read
+	void evaluateEndOfText();
+
+	void next();//Reads the next lexem
+	string kind();//returns the kins of lexem that was just read
+	string value();//returns the value of the lexeme (if it is an “ID” or a “NUM”).
+	int position();// returns the position of the lexeme that was just read
 	
 
-//private:
+private:
 	Token lexem;//contains the token list to be proviced to parser
 
 	bool isEqualsSymbol(string line, int& start, int& read);//keyword token
@@ -50,5 +62,8 @@ public:
 	void evaluateIdentifier(bool test, string line, int lineNumber, int& start, int& read, bool &error);
 	void evaluateKeyword(bool test, string line, int lineNumber, int& start, int& read, bool& error);
 	void evaluateNum(bool test, string line, int lineNumber, int& start, int& read, bool& error);
+	
+
+	
 };
 
