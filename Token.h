@@ -30,6 +30,10 @@ private:
 		};
 
 	vector<token> tokenList;
+
+	//int for the next() function
+	//initialized to negative one to prime first call to next
+	int nextElement = -1;
 	
 
 public:
@@ -40,6 +44,11 @@ public:
 	void addIdentifierToken(string idStr, int lineNum, int start);
 	void addEndOFDocToken();
 	void printTokenList();
+
+	void next();//reads the next lexeme in the input file
+	string kind();//returns the kind of the lexeme that was just read.
+	string value();// returns the value of the lexeme (if it is an “ID” or a “NUM”)
+	int position();//returns the position of the lexeme that was just read
 
 };//end Token class
 

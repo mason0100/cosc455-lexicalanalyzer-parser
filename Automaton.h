@@ -13,6 +13,7 @@ class Automaton
 
 public:
 	Automaton();//constructor
+	Automaton(Token &temp);//second construnctor
 	~Automaton();//Deconstructor
 	void identifyChar(string line, int lineNumber, bool &error);//Driver function
 
@@ -23,14 +24,9 @@ public:
 	//when the text document has been read
 	void evaluateEndOfText();
 
-	void next();//Reads the next lexem
-	string kind();//returns the kins of lexem that was just read
-	string value();//returns the value of the lexeme (if it is an “ID” or a “NUM”).
-	int position();// returns the position of the lexeme that was just read
 	
-
 private:
-	Token lexem;//contains the token list to be proviced to parser
+	Token* lexem;//pointer to the token that contains the list to be provided to parser
 
 	bool isEqualsSymbol(string line, int& start, int& read);//keyword token
 	bool isLessThanSymbol(string line, int& start, int& read);//keyword token

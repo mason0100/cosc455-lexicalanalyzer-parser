@@ -7,9 +7,16 @@ Automaton::Automaton() {
 }
 
 
+//Class Construnctor
+Automaton::Automaton(Token &temp) {
+	lexem = &temp;
+}
+
+
 //Deconstructor
 Automaton::~Automaton() {
 	cout << "Class is deleted" << endl;// for testing
+	//This needs something 
 
 }
 
@@ -180,14 +187,14 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 
 //print token list
 void Automaton::printTokenList() {
-	lexem.printTokenList();
+	lexem->printTokenList();
 }
 
 
 //This method will be called in the scanner function driver
 //when the text document has been read
 void Automaton::evaluateEndOfText() {
-	lexem.addEndOFDocToken();
+	lexem->addEndOFDocToken();
 }
 
 
@@ -527,7 +534,7 @@ void Automaton::evaluateIdentifier(bool test, string line, int lineNumber, int& 
 		//add to token list
 		int lengthToRead = read - start + 1;
 		string subStr = line.substr(start, lengthToRead);
-		lexem.addIdentifierToken(subStr, lineNumber, start);
+		lexem->addIdentifierToken(subStr, lineNumber, start);
 
 		//increment read to the next char to be read in the next driver loop
 		read++;
@@ -552,7 +559,7 @@ void Automaton::evaluateKeyword(bool test, string line, int lineNumber, int& sta
 		//add to token list
 		int lengthToRead = read - start +1; 
 		string subStr = line.substr(start, lengthToRead);
-		lexem.addKeywordToken(subStr, lineNumber, start);
+		lexem->addKeywordToken(subStr, lineNumber, start);
 
 		//increment read to the next char to be read in the next driver loop
 		read++;
@@ -577,7 +584,7 @@ void Automaton::evaluateNum(bool test, string line, int lineNumber, int& start, 
 		//add to token list
 		int lengthToRead = read - start + 1;
 		string subStr = line.substr(start, lengthToRead);
-		lexem.addNumToken(subStr, lineNumber, start);
+		lexem->addNumToken(subStr, lineNumber, start);
 
 		//increment read to the next char to be read in the next driver loop
 		read++;

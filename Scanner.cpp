@@ -1,8 +1,8 @@
 #include "Scanner.h"
 
 void Scanner::driver() {
-
-	Automaton automaton;
+	Token token;
+	Automaton automaton = Automaton(token);
 
 	//creates file object
 	fstream myfile;
@@ -23,29 +23,15 @@ void Scanner::driver() {
 
 	}
 	automaton.evaluateEndOfText();
-	automaton.printTokenList();
-}
+	//token.printTokenList();
 
+	token.next();
+	while (token.kind() != "END") {
+		
+		cout << "Position: " << token.position() << endl;
+		cout << "Kind: " << token.kind() << endl;
+		cout << "Value: " << token.value() << endl;
+		token.next();
 
-//reads the next lexeme in the input file
-void Scanner::next() {
-
-}
-
-
-//returns the kind of the lexeme that was just read.
-string Scanner::kind() {
-
-}
-
-
-//returns the value of the lexeme (if it is an “ID” or a “NUM”
-string Scanner::value(){
-
-}
-
-
-//returns the position of the lexeme that was just read
-int Scanner::position() {
-
+	}
 }

@@ -114,3 +114,36 @@ void Token::printTokenList() {
 
 }
 
+
+//reads the next lexeme in the input file
+void Token::next() {
+	this->nextElement++;
+}
+
+
+//returns the kind of the lexeme that was just read.
+string Token::kind() {
+	
+	return this->tokenList[this->nextElement].type;
+}
+
+
+// returns the value of the lexeme (if it is an “ID” or a “NUM”)
+string Token::value() {
+	if (this->tokenList[this->nextElement].type.compare("NUM") == 0) {
+
+		int temp = this->tokenList[this->nextElement].numValue;
+		return to_string(temp);
+	}
+	else {
+		return this->tokenList[this->nextElement].idValue;
+	}
+}
+
+
+//returns the position of the lexeme that was just read
+int Token::position() {
+	return this->tokenList[this->nextElement].tokenPosition;
+
+}
+
