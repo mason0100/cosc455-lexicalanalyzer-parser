@@ -4,8 +4,10 @@
 
 //could in the future make a constructor for each of the token types
 Token::Token(){
-
+	
 }
+
+
 // adds num token to the token list
 void Token::addNumToken(string numStr,int lineNum, int start) {
 
@@ -15,10 +17,10 @@ void Token::addNumToken(string numStr,int lineNum, int start) {
 	temp.tokenPosition = tokenList.size(); 
 
 	//Assign type
-	temp.type = "ID";
+	temp.type = "NUM";
 
 	//Token Value for num
-	int numValue = stoi(numStr);
+	temp.numValue = stoi(numStr);
 
 	//Postion
 	temp.lineNumber = lineNum;
@@ -61,10 +63,10 @@ void Token::addIdentifierToken(string idStr, int lineNum, int start) {
 	temp.tokenPosition = tokenList.size();
 
 	//Assign type
-	temp.type = "NUM";
+	temp.type = "ID";
 
 	//Token Value for num
-	temp.IdValue = idStr;
+	temp.idValue = idStr;
 
 	//Postion
 	temp.lineNumber = lineNum;
@@ -101,13 +103,19 @@ void Token::addEndOFDocToken() {
 
 //prints token list for testing
 //name needs changed
-void Token::tokenListToString() {
-/*
+void Token::printTokenList() {
+
 	for (int i = 0; i < tokenList.size(); i++) {
-		cout << "Index: " << tokenList[i].idNumber << endl;
-		cout << "Token ID: " << tokenList[i].tokenId << endl;
-		cout << "Num Value " << tokenList[i].numValue << endl;
-	}*/
+		cout << "Token Position: " << tokenList[i].tokenPosition << endl;
+		cout << "Token Type: " << tokenList[i].type << endl;
+		cout << "Num Value: " << tokenList[i].numValue << endl;
+		cout << "ID Value: " << tokenList[i].idValue << endl;
+		cout << "Line Number: " << tokenList[i].lineNumber << endl;
+		cout << "Line Position: " << tokenList[i].linePosition << endl;
+		cout << endl << endl;
+		
+	}
+
 
 }
 

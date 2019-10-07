@@ -12,17 +12,15 @@ class Token{
 
 private:
 	
-	//This will be the id table for identifier tokens
-	//the index will be associate with the id number in the token stuct 
-	vector<string> idTable;
+	
 
 	struct token {
 		int tokenPosition; // the index of the created toke will be assigned to this value
 		string type; // ID , NUM , not, true , false , _ , +, -, / , * , + , <
 		
 		//values, only ID and NUM tokens will be assigned a value
-		int numValue = NULL; // for num tokens
-		string IdValue = NULL; // for identity tokens
+		int numValue = -1; // for num tokens
+		string idValue = "NOT ID"; // for identity tokens
 		
 
 		//Postion Variables
@@ -32,6 +30,7 @@ private:
 		};
 
 	vector<token> tokenList;
+	
 
 public:
 
@@ -40,7 +39,9 @@ public:
 	void addKeywordToken(string keywordStr, int lineNum, int start);
 	void addIdentifierToken(string idStr, int lineNum, int start);
 	void addEndOFDocToken();
-	void tokenListToString();
+	void printTokenList();
 
 };//end Token class
+
+
 

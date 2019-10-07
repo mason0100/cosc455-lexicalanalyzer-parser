@@ -28,62 +28,61 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 	if (line != "") {
 
 		//processes until read == line.length 
-		while(read < line.length()) {
+		while(read < line.length() && error == false) {
 			char c = line[read];
 			switch (c) {
 			case ' ':
 				processWhiteSpace(line, start, read);
-				//insert function to test for white space
 				break;
 			case '=':
 				test = isEqualsSymbol(line, start, read);
-				evaluate(test, start, read);
+				evaluateKeyword(test, line, lineNumber, start, read, error);
 				//insert function
 				break;
 			case '<':
 				test = isLessThanSymbol(line, start, read);
-				evaluate(test, start, read);
+				evaluateKeyword(test, line, lineNumber, start, read, error);
 				//insert function
 				break;
 			case '+':
 				test = isPlusSymbol(line, start, read);
-				evaluate(test, start, read);
+				evaluateKeyword(test, line, lineNumber, start, read, error);
 				//insert function
 				break;
 			case '-':
 				test = isMinusSymbol(line, start, read);
-				evaluate(test, start, read);
+				evaluateKeyword(test, line, lineNumber, start, read, error);
 				//insert function
 				break;
 			case '*':
 				test = isMultiplicationSymbol(line, start, read);
-				evaluate(test, start, read);
+				evaluateKeyword(test, line, lineNumber, start, read, error);
 				//insert function
 				break;
 			case '/':
 				test = isCommentSymbol(line, start, read);
 				if (test == true) {
-					evaluate(test, start, read);
+					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
 				else {// test == false
 					test = isDivisionSymbol(line, start, read);
-					evaluate(test, start, read);
+					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
 				//insert function, must test for comment out and '/' keyword
 				break;
 			case '_':
 				test = isUnderscoreSymbol(line, start, read);
-				evaluate(test, start, read);
+				evaluateKeyword(test, line, lineNumber, start, read, error);
 				//insert function
 				break;
 			case 'f':
 				test = isNot(line, start, read);
 				if (test == true) {
-					evaluate(test, start, read);
+					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
 				else {// test == false
 					test = isIdentifier(line, start, read);
-					evaluate(test, start, read);
+					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
 				
 				//insert function to test for "false"
@@ -91,22 +90,22 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case 't':
 				test = isTrue(line, start, read);
 				if (test == true) {
-					evaluate(test, start, read);
+					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
 				else {// test == false
 					test = isIdentifier(line, start, read);
-					evaluate(test, start, read);
+					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
 				//insert function to test for "true"
 				break;
 			case 'n':
 				test = isNot(line, start, read);
 				if (test == true) {
-					evaluate(test, start, read);
+					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
 				else {// test == false
 					test = isIdentifier(line, start, read);
-					evaluate(test, start, read);
+					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
 				//insert function to test for "not"
 				break;
@@ -163,7 +162,7 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case 'Y':
 			case 'Z':
 				test = isIdentifier(line, start, read);
-				evaluate(test, start, read);
+				evaluateIdentifier(test, line, lineNumber, start, read, error);
 				//function for identifiie goes here
 				break;
 			case '0':
@@ -177,12 +176,13 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case '8':
 			case '9':
 				test = isNumber(line, start, read);
-				evaluate(test, start, read);
+				evaluateNum(test, line, lineNumber, start, read, error);
 				//function for Integral Literal goes here
 				break;
 			
 			default:
-				//insert error fuction
+				error = true;
+				cout << "Error on line " << lineNumber << " at position " << start << endl;
 				break;
 			}
 		}
@@ -519,16 +519,77 @@ void Automaton::processWhiteSpace(string line, int &start, int &read) {
 	cout << line[read] << endl;//for testing DELETE LATER
 }
 
-//Function decides whether to tokenize or mark error and exit program
-void Automaton::evaluate(bool test, int& start, int& read) {
+
+//Function decides whether to tokenize Indentifier or mark error and exit program
+void Automaton::evaluateIdentifier(bool test, string line, int lineNumber, int& start, int& read, bool &error) {
 
 	if (test == true) {
 		//add to token list
+		int lengthToRead = read - start + 1;
+		string subStr = line.substr(start, lengthToRead);
+		lexem.addIdentifierToken(subStr, lineNumber, start);
+
 		//increment read to the next char to be read in the next driver loop
-		//set start = read 
+		read++;
+
+		//set start to catch up to read so the next lexem can be taken 
+		start = read;
+
 	}
 	else {//test == false
 		//exit program and mark error at line number and element position
+		error = true;
+		cout << "Error on line " << lineNumber << " at position " << start << endl;
+	}
+
+}
+
+
+//Function decides whether to tokenize keyword or mark error and exit program
+void Automaton::evaluateKeyword(bool test, string line, int lineNumber, int& start, int& read, bool& error) {
+
+	if (test == true) {
+		//add to token list
+		int lengthToRead = read - start +1; 
+		string subStr = line.substr(start, lengthToRead);
+		lexem.addKeywordToken(subStr, lineNumber, start);
+
+		//increment read to the next char to be read in the next driver loop
+		read++;
+
+		//set start to catch up to read so the next lexem can be taken 
+		start = read;
+
+	}
+	else {//test == false
+		//exit program and mark error at line number and element position
+		error = true;
+		cout << "Error on line " << lineNumber << " at position " << start << endl;
+	}
+
+}
+
+
+//Function decides whether to tokenize num or mark error and exit program
+void Automaton::evaluateNum(bool test, string line, int lineNumber, int& start, int& read, bool& error) {
+
+	if (test == true) {
+		//add to token list
+		int lengthToRead = read - start + 1;
+		string subStr = line.substr(start, lengthToRead);
+		lexem.addNumToken(subStr, lineNumber, start);
+
+		//increment read to the next char to be read in the next driver loop
+		read++;
+
+		//set start to catch up to read so the next lexem can be taken 
+		start = read;
+
+	}
+	else {//test == false
+		//exit program and mark error at line number and element position
+		error = true;
+		cout << "Error on line " << lineNumber << " at position " << start << endl;
 	}
 
 }

@@ -6,6 +6,8 @@
 
 #include "Automaton.h"
 #include "Token.h"
+#include "Scanner.h"
+
 using namespace std;
 
 void testNumId();
@@ -13,60 +15,15 @@ void testId();
 
 int main() {
 
-	/////hahahahaha
+	Automaton a;
 
-
-
-	//creates file object
-	fstream myfile;
-
-	//opens file
-	myfile.open("test.txt");
-
-	//string variable for reading file 
-	string str;
-
-
-
-	while (getline(myfile, str)) {
-
-		cout << str << endl;
+	string str = "%a + 2~";
+	int lineNum = 0;
+	bool error = false;
+	if(error == false){
+		a.identifyChar(str, lineNum, error);
+		a.lexem.printTokenList();
 	}
-	//Automaton automaton;
-	//int start = 0;
-	//int read = 0;
-
-	////This while statement reads a .txt file line by line
-	//while (getline(myfile, str)) {
-	//	automaton.processWhiteSpace(str, start, read);
-	//}
-	//cout << "Start: " << start << endl;
-	//cout << "Read : " << read << endl;
-	myfile.close();
-	//return 0;
-
-
-
-	//Token token;
-
-	/*cout << automaton.isUnderscore('c') << endl;
-	cout << automaton.isUnderscore('_') << endl;
-	cout << automaton.isUnderscore('p') << endl;
-	cout << automaton.isUnderscore('-') << endl;
-
-
-	cout << endl;
-
-	str = "012345";
-	cout << str.at(0) << endl;
-	cout << str.at(1) << endl;
-	cout << str.at(2) << endl;
-	cout << str.at(3) << endl;
-	cout << str.at(4) << endl;
-	cout << str.at(5) << endl;*/
-
-	//testNumId();
-	testId();
 }
 
 void testNumId() {

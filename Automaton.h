@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <string>
+#include "Token.h"
 
 
 using namespace std;
@@ -17,6 +18,7 @@ public:
 	
 
 //private:
+	Token lexem;//contains the token list to be proviced to parser
 
 	bool isEqualsSymbol(string line, int& start, int& read);//keyword token
 	bool isLessThanSymbol(string line, int& start, int& read);//keyword token
@@ -45,6 +47,8 @@ public:
 	void processWhiteSpace(string line, int &start, int &read);
 
 	//Function decides whether to tokenize or mark error and exit program
-	void evaluate(bool test, int& start, int& read);
+	void evaluateIdentifier(bool test, string line, int lineNumber, int& start, int& read, bool &error);
+	void evaluateKeyword(bool test, string line, int lineNumber, int& start, int& read, bool& error);
+	void evaluateNum(bool test, string line, int lineNumber, int& start, int& read, bool& error);
 };
 
