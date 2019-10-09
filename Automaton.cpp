@@ -15,8 +15,7 @@ Automaton::Automaton(Token &temp) {
 
 //Deconstructor
 Automaton::~Automaton() {
-	cout << "Class is deleted" << endl;// for testing
-	//This needs something 
+	//Nothing in here for now.  
 
 }
 
@@ -31,11 +30,14 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 	int start = 0;
 	int read = 0; 
 
+	//boolean for comment, if commentBool == true, exit line because the rest of the line is commented out
+	bool commentBool = false;
+
 	//will skip if the line is blank
 	if (line != "") {
 
 		//processes until read == line.length 
-		while(read < line.length() && error == false) {
+		while(read < line.length() && error == false && commentBool == false) {
 			char c = line[read];
 			switch (c) {
 			case ' ':
@@ -65,7 +67,8 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case '/':
 				test = isCommentSymbol(line, start, read);
 				if (test == true) {
-					//need to exit line
+					//exit line because the rest of the line is commented out
+					commentBool = true; 
 				}
 				else {// test == false
 					test = isDivisionSymbol(line, start, read);
@@ -186,6 +189,7 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 
 
 //print token list
+//For testing purposes only
 void Automaton::printTokenList() {
 	lexem->printTokenList();
 }

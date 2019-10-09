@@ -12,7 +12,11 @@ class Scanner{
 public:
 
 
-	void driver();
+	string fileName;
+
+	Scanner(string tempFileName);
+
+	int driver();
 	
 
 };//end Scanner class
