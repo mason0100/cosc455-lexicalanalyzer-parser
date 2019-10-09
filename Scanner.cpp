@@ -47,7 +47,8 @@ int Scanner::driver() {
 
 	}
 	automaton.evaluateEndOfText();
-	//token.printTokenList();
+	
+
 
 	if (error == false) {
 		token.next();
@@ -61,6 +62,7 @@ int Scanner::driver() {
 
 		}
 	}
+
 
 	myFile.close();
 	return 0;
