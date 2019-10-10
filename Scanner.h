@@ -15,7 +15,7 @@ public:
 	string fileName;
 	Scanner(string tempFileName);
 
-	int driver();
+	int driver(bool &error);
 	void next();
 	string kind();
 	string value();

@@ -21,7 +21,7 @@ Automaton::~Automaton() {
 
 
 //this is the function that identifies the tokens 
-void Automaton::identifyChar(string line, int lineNumber, bool &error) {
+void Automaton::tokenizeFile(string line, int lineNumber, bool &error) {
 
 	//Inititate the test boolean for token eveluation
 	bool test;

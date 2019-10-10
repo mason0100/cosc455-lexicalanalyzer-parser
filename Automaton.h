@@ -15,7 +15,7 @@ public:
 	Automaton();//constructor
 	Automaton(Token &temp);//second construnctor
 	~Automaton();//Deconstructor
-	void identifyChar(string line, int lineNumber, bool &error);//Driver function
+	void tokenizeFile(string line, int lineNumber, bool &error);//Driver function
 
 	//Print token list
 	void printTokenList();

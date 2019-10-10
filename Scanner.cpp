@@ -10,7 +10,7 @@ Scanner::Scanner(string tempFileName) {
 
 //This is the driver that runs the program
 //After main, all other parts of the program are called from here. 
-int Scanner::driver() {
+int Scanner::driver(bool &error) {
 	
 	//declarations for Token and Automaton objects
 	
@@ -31,30 +31,15 @@ int Scanner::driver() {
 	string line;
 
 	int lineNumber = 1;
-	bool error = false;
 
 	//This while statement reads a .txt file line by line
 	while (getline(myFile, line)) {
 
-		automaton.identifyChar(line, lineNumber, error);
+		automaton.tokenizeFile(line, lineNumber, error);
 		lineNumber++;
 	}
 	automaton.evaluateEndOfText();
 	
-	if (error == false) {
-		next();
-		while (token.kind() != "END") {
-
-			cout << "Position: " << position() << endl;
-			cout << "Kind: " << kind() << endl;
-			cout << "Value: " << value() << endl;
-			cout << endl << endl;
-			token.next();
-
-		}
-	}
-
-
 	myFile.close();
 	return 0;
 }
