@@ -48,7 +48,7 @@ public:
 	void next();//reads the next lexeme in the input file
 	string kind();//returns the kind of the lexeme that was just read.
 	string value();// returns the value of the lexeme (if it is an “ID” or a “NUM”)
-	int position();//returns the position of the lexeme that was just read
+	string position();//returns the position of the lexeme that was just read
 
 };//end Token class
 

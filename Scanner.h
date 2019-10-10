@@ -11,12 +11,15 @@ class Scanner{
 
 public:
 
-
+	Token token;
 	string fileName;
-
 	Scanner(string tempFileName);
 
 	int driver();
+	void next();
+	string kind();
+	string value();
+	string position();
 	
 
 };//end Scanner class

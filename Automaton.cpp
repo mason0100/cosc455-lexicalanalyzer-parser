@@ -40,28 +40,17 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 		while(read < line.length() && error == false && commentBool == false) {
 			char c = line[read];
 			switch (c) {
+			case '\t':
 			case ' ':
-				processWhiteSpace(line, start, read);
+				processWhiteSpaceOrTab(line, start, read);
 				break;
 			case '=':
-				test = isEqualsSymbol(line, start, read);
-				evaluateKeyword(test, line, lineNumber, start, read, error);
-				break;
 			case '<':
-				test = isLessThanSymbol(line, start, read);
-				evaluateKeyword(test, line, lineNumber, start, read, error);
-				break;
 			case '+':
-				test = isPlusSymbol(line, start, read);
-				evaluateKeyword(test, line, lineNumber, start, read, error);
-				break;
 			case '-':
-				test = isMinusSymbol(line, start, read);
-				evaluateKeyword(test, line, lineNumber, start, read, error);
-				//insert function
-				break;
 			case '*':
-				test = isMultiplicationSymbol(line, start, read);
+			case '_':
+				test = isSingleCharKeyword(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
 				break;
 			case '/':
@@ -71,16 +60,16 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 					commentBool = true; 
 				}
 				else {// test == false
-					test = isDivisionSymbol(line, start, read);
+					test = isSingleCharKeyword(line, start, read);
 					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
 				break;
-			case '_':
-				test = isUnderscoreSymbol(line, start, read);
-				evaluateKeyword(test, line, lineNumber, start, read, error);
-				break;
-			case 'f':
-				test = isFalse(line, start, read);
+			case 'o':// 'or'
+			case 'a':// 'and'
+			case 'f':// 'false
+			case 't':// 'true
+			case 'n':// 'not
+				test = isSingleMuliCharKeyword(line, start, read);
 				if (test == true) {
 					evaluateKeyword(test, line, lineNumber, start, read, error);
 				}
@@ -89,27 +78,7 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 					evaluateIdentifier(test, line, lineNumber, start, read, error);
 				}
 				break;
-			case 't':
-				test = isTrue(line, start, read);
-				if (test == true) {
-					evaluateKeyword(test, line, lineNumber, start, read, error);
-				}
-				else {// test == false
-					test = isIdentifier(line, start, read);
-					evaluateIdentifier(test, line, lineNumber, start, read, error);
-				}
-				break;
-			case 'n':
-				test = isNot(line, start, read);
-				if (test == true) {
-					evaluateKeyword(test, line, lineNumber, start, read, error);
-				}
-				else {// test == false
-					test = isIdentifier(line, start, read);
-					evaluateIdentifier(test, line, lineNumber, start, read, error);
-				}
-				break;
-			case 'a':
+			//case 'a':
 			case 'b':
 			case 'c':
 			case 'd':
@@ -123,7 +92,7 @@ void Automaton::identifyChar(string line, int lineNumber, bool &error) {
 			case 'l':
 			case 'm':
 			//case 'n':
-			case 'o':
+			//case 'o':
 			case 'p':
 			case 'q':
 			case 'r':
@@ -202,57 +171,6 @@ void Automaton::evaluateEndOfText() {
 }
 
 
-
-//Returns true is the token is '='
-bool Automaton::isEqualsSymbol(string line, int& start, int& read) {
-	char token = line.at(read);
-	if (token == '=') {
-		return true; 
-	}
-	return false;
-}
-
-
-//Returns true if token is '<'
-bool Automaton::isLessThanSymbol(string line, int& start, int& read) {
-	char token = line.at(read);
-	if (token == '<') {
-		return true;
-	}
-	return false;
-}
-
-
-//Returns true if token is '+'
-bool Automaton::isPlusSymbol(string line, int& start, int& read) {
-	char token = line.at(read);
-	if (token == '+') {
-		return true;
-	}
-	return false;
-}
-
-
-//Returns true if token is '-'
-bool Automaton::isMinusSymbol(string line, int& start, int& read) {
-	char token = line.at(read);
-	if (token == '-') {
-		return true;
-	}
-	return false;
-}
-
-
-//Returns true if token is '*'
-bool Automaton::isMultiplicationSymbol(string line, int& start, int& read) {
-	char token = line.at(read);
-	if (token == '*') {
-		return true;
-	}
-	return false;
-}
-
-
 //Returns true if token is '//'
 bool Automaton::isCommentSymbol(string line, int& start, int& read) {
 	char token = line.at(start);
@@ -274,88 +192,47 @@ bool Automaton::isCommentSymbol(string line, int& start, int& read) {
 }
 
 
-//Returns true is token is '/'
-bool Automaton::isDivisionSymbol(string line, int& start, int& read) {
+//Single char Keyword test
+bool Automaton::isSingleCharKeyword(string line, int& start, int& read) {
 	char token = line.at(start);
-	if (isForwardSlash(token) == true) {
+
+	if (token == '=' || token == '<' || token == '+' || token == '-' || token == '*' || token == '/' || token == '_') {
 		return true;
 	}
 	return false;
 }
 
 
-//Returns true for the false keyword
-//If the functions returns false, the read array pointer will be reset back to the start value
-//Identifier will then be called to test is substring is an identfier token
-bool Automaton::isFalse(string line, int& start, int& read) {
-	//checks if the line string has enough characters to have 'false' in it
-	if (line.size() > read+4) {
-		if (line.at(read) == 'f') {
+//Tests for char keywords with size greater than 1
+bool Automaton::isSingleMuliCharKeyword(string line, int& start, int& read) {
+	int lengthToRead = read - start + 1;
+	char token = line.at(start);
+	string keyword = "";
+	keyword += token;
+
+	int peak = read+1;
+
+	while (true) {
+
+		if (keyword.compare( "or") == 0 || keyword.compare("and") == 0 
+			|| keyword.compare("not") == 0 ||  keyword.compare("true") == 0 
+			|| keyword.compare("false") == 0) {
+			
+			return true;
+		}
+		else {
 			read++;
-			if (line.at(read) == 'a') {
-				read++;
-				if (line.at(read) == 'l') {
-					read++;
-					if (line.at(read) == 's') {
-						read++;
-						if (line.at(read) == 'e') {
-							//does not increment read because this is the end of the token
-							return true;
-						}
-					}
-				}
-			}
+			peak++;
+		}
+		if (line.size() >= peak) {
+			token = line.at(read);
+			keyword += token;
+		}
+		else {
+			break;
 		}
 	}
-	//if the token is not 'false' read is reset and made equal to start for the isIdentfier() function
-	read = start;
-	return false;
-}
-
-
-//Returns true for keyword 'true'
-//If the functions returns false, the read array pointer will be reset back to the start value
-//Identifier will then be called to test is substring is an identfier token
-bool Automaton::isTrue(string line, int& start, int& read) {
-	//checks if the line string has enough characters to have 'true' in it
-	if (line.size() > read+3){
-		if (line.at(read) == 't') {
-			read++;
-			if (line.at(read) == 'r') {
-				read++;
-				if (line.at(read) == 'u') {
-					read++;
-					if (line.at(read) == 'e') {
-						return true;
-					}
-				}
-			}
-		}
-	}
-	//if the token is not 'true' read is reset and made equal to start for the isIdentfier() function
-	read = start;
-	return false;
-}
-
-
-//Returns true is keyword is 'not'
-//If the functions returns false, the read array pointer will be reset back to the start value
-//Identifier will then be called to test is substring is an identfier token
-bool Automaton::isNot(string line, int& start, int& read) {
-	//checks if the line string has enough characters to have 'not' in it
-	if(line.size() > read+2){
-		if (line.at(read) == 'n') {
-			read++;
-			if (line.at(read) == 'o') {
-				read++;
-				if (line.at(read) == 't') {
-					return true;
-				}
-			}
-		}
-	}
-	//if the token is not 'not' read is reset and made equal to start for the isIdentfier() function
-	read = start;
+	read = start;//reset read for isIdentifier()
 	return false;
 }
 
@@ -393,9 +270,7 @@ bool Automaton::isNumber(string line, int& start, int& read){
 		}
 		else {
 			break;
-		}
-			
-		
+		}	
 	}
 	return true;
 }
@@ -418,7 +293,6 @@ bool Automaton::isIdentifier(string line, int& start, int& read) {
 	//set token to peak forward
 	if (line.size() - 1 > read) {
 		token = line.at(peak);
-		//read++;
 	}
 
 	while (true) {
@@ -443,7 +317,6 @@ bool Automaton::isIdentifier(string line, int& start, int& read) {
 	//this funtion will return true after finding a char outside the identifier defintion
 	//the start and read array pointers will be permanently changed and the next function will 
 	//convert the substring between start and read
-
 	return true;
 }
 
@@ -516,18 +389,10 @@ bool Automaton::isDigit(char token) {
 }
 
 //Processes white spaces between tokens
-void Automaton::processWhiteSpace(string line, int &start, int &read) {
-	//peaks at the next char after read to see if it is a white space
-	//if it is a white space read++
-	//else start and read are updated to process the rest of the line
-	while (line[read + 1] == ' ') {
-		read++;
-	}
-
+void Automaton::processWhiteSpaceOrTab(string line, int &start, int &read) {
 	//set read and start to the begining of the next token to be processed
 	read++;
 	start = read;
-
 }
 
 

@@ -142,8 +142,10 @@ string Token::value() {
 
 
 //returns the position of the lexeme that was just read
-int Token::position() {
-	return this->tokenList[this->nextElement].tokenPosition;
-
+string Token::position() {
+	string lineNumber = to_string(this->tokenList[this->nextElement].lineNumber);
+	string linePosition = to_string(this->tokenList[this->nextElement].linePosition);
+	
+	return "(" + lineNumber + " , " + linePosition + ")";
 }
 

@@ -38,6 +38,8 @@ private:
 	bool isFalse(string line, int& start, int& read);
 	bool isTrue(string line, int& start, int& read);
 	bool isNot(string line, int& start, int& read);
+	bool isSingleCharKeyword(string line, int& start, int& read);
+	bool isSingleMuliCharKeyword(string line, int& start, int& read);
 
 
 	bool isNumber(string line, int& start, int& read);//number token
@@ -51,8 +53,9 @@ private:
 	bool isLetter(char token);//helper function
 	bool isForwardSlash(char token);//helper functtion
 
-	//White space function
-	void processWhiteSpace(string line, int &start, int &read);
+	//White space and Tab function
+	void processWhiteSpaceOrTab(string line, int &start, int &read);
+	
 
 	//Function decides whether to tokenize or mark error and exit program
 	void evaluateIdentifier(bool test, string line, int lineNumber, int& start, int& read, bool &error);
