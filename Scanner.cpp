@@ -1,11 +1,10 @@
 #include "Scanner.h"
 
 //Constructor
-Scanner::Scanner(string tempFileName) {
+Scanner::Scanner(Token &tempToken, string tempFileName) {
+	token = &tempToken;
 	this->fileName = tempFileName;	
 }
-
-
 
 
 //This is the driver that runs the program
@@ -14,7 +13,7 @@ int Scanner::driver(bool &error) {
 	
 	//declarations for Token and Automaton objects
 	
-	Automaton automaton = Automaton(token);
+	Automaton automaton = Automaton(*token);
 
 	//creates file object
 	fstream myFile;
@@ -24,7 +23,7 @@ int Scanner::driver(bool &error) {
 
 	if (myFile.is_open() == false) {
 		cout << "File did not open correctly, check file name." << endl;
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 
 	//string variable for reading file 
@@ -44,21 +43,3 @@ int Scanner::driver(bool &error) {
 	return 0;
 }
 
-void Scanner::next() {
-	token.next();
-}
-
-
-string Scanner::kind() {
-	return token.kind();
-}
-
-
-string Scanner::value() {
-	return token.value();
-}
-
-
-string Scanner::position() {
-	return token.position();
-}

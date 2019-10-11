@@ -1,7 +1,5 @@
 #include "Token.h"
 
-
-
 //could in the future make a constructor for each of the token types
 Token::Token(){
 	
@@ -49,8 +47,7 @@ void Token::addKeywordToken(string keywordStr, int lineNum, int start) {
 	temp.linePosition = start;
 
 	//add to vector
-	tokenList.push_back(temp);
-	
+	tokenList.push_back(temp);	
 }
 
 
@@ -74,7 +71,6 @@ void Token::addIdentifierToken(string idStr, int lineNum, int start) {
 
 	//add to vector
 	tokenList.push_back(temp);
-
 }
 
 
@@ -92,7 +88,6 @@ void Token::addEndOFDocToken() {
 
 	//add to vector
 	tokenList.push_back(temp);
-
 }
 
 
@@ -107,17 +102,15 @@ void Token::printTokenList() {
 		cout << "ID Value: " << tokenList[i].idValue << endl;
 		cout << "Line Number: " << tokenList[i].lineNumber << endl;
 		cout << "Line Position: " << tokenList[i].linePosition << endl;
-		cout << endl << endl;
-		
+		cout << endl << endl;	
 	}
-
-
 }
 
 
 //reads the next lexeme in the input file
-void Token::next() {
-	this->nextElement++;
+Token::token Token::next() {
+	nextElement++;
+	return tokenList[nextElement];
 }
 
 
@@ -131,11 +124,10 @@ string Token::kind() {
 // returns the value of the lexeme (if it is an “ID” or a “NUM”)
 string Token::value() {
 	if (this->tokenList[this->nextElement].type.compare("NUM") == 0) {
-
 		int temp = this->tokenList[this->nextElement].numValue;
 		return to_string(temp);
 	}
-	else {
+	else{
 		return this->tokenList[this->nextElement].idValue;
 	}
 }

@@ -16,7 +16,6 @@ Automaton::Automaton(Token &temp) {
 //Deconstructor
 Automaton::~Automaton() {
 	//Nothing in here for now.  
-
 }
 
 
@@ -146,7 +145,6 @@ void Automaton::tokenizeFile(string line, int lineNumber, bool &error) {
 				test = isNumber(line, start, read);
 				evaluateNum(test, line, lineNumber, start, read, error);
 				break;
-			
 			default:
 				error = true;
 				cout << "Error on line " << lineNumber << " at position " << start << endl;
@@ -214,11 +212,16 @@ bool Automaton::isSingleMuliCharKeyword(string line, int& start, int& read) {
 
 	while (true) {
 
-		if (keyword.compare( "or") == 0 || keyword.compare("and") == 0 
-			|| keyword.compare("not") == 0 ||  keyword.compare("true") == 0 
+		if (keyword.compare("or") == 0 || keyword.compare("and") == 0
+			|| keyword.compare("not") == 0 || keyword.compare("true") == 0
 			|| keyword.compare("false") == 0) {
-			
-			return true;
+
+			if (read == line.size() - 1) {
+				return true;
+			}
+			if (line.size() > peak && line.at(peak) == ' ') {
+				return true;
+			}
 		}
 		else {
 			read++;
@@ -387,6 +390,7 @@ bool Automaton::isDigit(char token) {
 	}
 	return false;
 }
+
 
 //Processes white spaces between tokens
 void Automaton::processWhiteSpaceOrTab(string line, int &start, int &read) {

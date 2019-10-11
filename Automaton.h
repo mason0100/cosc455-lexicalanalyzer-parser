@@ -28,16 +28,7 @@ public:
 private:
 	Token* lexem;//pointer to the token that contains the list to be provided to parser
 
-	bool isEqualsSymbol(string line, int& start, int& read);//keyword token
-	bool isLessThanSymbol(string line, int& start, int& read);//keyword token
-	bool isPlusSymbol(string line, int& start, int& read);//keyword token
-	bool isMinusSymbol(string line, int& start, int& read);//keyword token
-	bool isMultiplicationSymbol(string line, int& start, int& read);//keyword token
 	bool isCommentSymbol(string line, int& start, int& read);//keyword token
-	bool isDivisionSymbol(string line, int& start, int& read);
-	bool isFalse(string line, int& start, int& read);
-	bool isTrue(string line, int& start, int& read);
-	bool isNot(string line, int& start, int& read);
 	bool isSingleCharKeyword(string line, int& start, int& read);
 	bool isSingleMuliCharKeyword(string line, int& start, int& read);
 

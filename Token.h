@@ -20,16 +20,14 @@ private:
 		
 		//values, only ID and NUM tokens will be assigned a value
 		int numValue = -1; // for num tokens
-		string idValue = "NOT ID"; // for identity tokens
+		string idValue = "N/A"; // for identity tokens
 		
-
 		//Postion Variables
 		int lineNumber;
 		int linePosition;// Position of first character of the lexem
-
 		};
 
-	vector<token> tokenList;
+	vector<token> tokenList;//list of tokens 
 
 	//int for the next() function
 	//initialized to negative one to prime first call to next
@@ -45,7 +43,7 @@ public:
 	void addEndOFDocToken();
 	void printTokenList();
 
-	void next();//reads the next lexeme in the input file
+	token next();//reads the next lexeme in the input file
 	string kind();//returns the kind of the lexeme that was just read.
 	string value();// returns the value of the lexeme (if it is an “ID” or a “NUM”)
 	string position();//returns the position of the lexeme that was just read

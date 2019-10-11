@@ -11,16 +11,11 @@ class Scanner{
 
 public:
 
-	Token token;
+	Token* token;
 	string fileName;
-	Scanner(string tempFileName);
+	Scanner(Token &tempToken, string tempFileName);
 
 	int driver(bool &error);
-	void next();
-	string kind();
-	string value();
-	string position();
-	
 
 };//end Scanner class
 

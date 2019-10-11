@@ -12,28 +12,29 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	
-	if (argc != 2) {
+	/*if (argc != 2) {
 		cout << "Parameters not entered correctley" << endl;
 		return -1;
 	}
 
 
-	string fileName = argv[1];
+	string fileName = argv[1];*/
 	
-	//string fileName = "testArithmatic.txt";
+	string fileName = "testBoolean.txt";
 	bool error = false;
-	Scanner a = Scanner(fileName);
+	Token token;
+	Scanner a = Scanner(token,fileName);
 	a.driver(error);
 
 	if (error == false) {
-		a.next();
-		while (a.kind() != "END") {
+		token.next();
+		while (token.kind() != "END") {
 
-			cout << "Position: " << a.position() << endl;
-			cout << "Kind: " << a.kind() << endl;
-			cout << "Value: " << a.value() << endl;
+			cout << "Position: " << token.position() << endl;
+			cout << "Kind: " << token.kind() << endl;
+			cout << "Value: " << token.value() << endl;
 			cout << endl << endl;
-			a.next();
+			token.next();
 
 		}
 	}
