@@ -14,7 +14,6 @@ public:
 	Token* token;
 	string fileName;
 	Scanner(Token &tempToken, string tempFileName);
-
 	int driver(bool &error);
 
 };//end Scanner class

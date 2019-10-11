@@ -108,7 +108,7 @@ void Token::printTokenList() {
 
 
 //reads the next lexeme in the input file
-Token::token Token::next() {
+struct Token::token Token::next() {
 	nextElement++;
 	return tokenList[nextElement];
 }

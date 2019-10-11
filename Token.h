@@ -5,15 +5,11 @@
 
 using namespace std;
 
-
-
 //There are four token types in this language: identifier, num, keyword, endOfText
 class Token{
 
-private:
+public:
 	
-	
-
 	struct token {
 		int tokenPosition; // the index of the created toke will be assigned to this value
 		string type; // ID , NUM , not, true , false , _ , +, -, / , * , + , <
@@ -26,6 +22,8 @@ private:
 		int lineNumber;
 		int linePosition;// Position of first character of the lexem
 		};
+
+private:
 
 	vector<token> tokenList;//list of tokens 
 
@@ -41,6 +39,7 @@ public:
 	void addKeywordToken(string keywordStr, int lineNum, int start);
 	void addIdentifierToken(string idStr, int lineNum, int start);
 	void addEndOFDocToken();
+
 	void printTokenList();
 
 	token next();//reads the next lexeme in the input file

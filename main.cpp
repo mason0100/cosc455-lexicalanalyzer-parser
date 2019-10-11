@@ -2,8 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
-
+#include "Token.h"
 #include "Scanner.h"
 
 using namespace std;
@@ -12,15 +11,14 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	
-	/*if (argc != 2) {
+	if (argc != 2) {
 		cout << "Parameters not entered correctley" << endl;
 		return -1;
 	}
 
-
-	string fileName = argv[1];*/
+	string fileName = argv[1];
 	
-	string fileName = "testBoolean.txt";
+	//string fileName = "testCommentsWhiteSpace.txt";
 	bool error = false;
 	Token token;
 	Scanner a = Scanner(token,fileName);
