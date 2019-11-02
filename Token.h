@@ -47,6 +47,9 @@ public:
 	string value();// returns the value of the lexeme (if it is an “ID” or a “NUM”)
 	string position();//returns the position of the lexeme that was just read
 
+
+	
+
 };//end Token class
 
 

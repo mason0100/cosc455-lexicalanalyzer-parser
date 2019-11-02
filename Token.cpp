@@ -141,3 +141,4 @@ string Token::position() {
 	return "(" + lineNumber + " , " + linePosition + ")";
 }
 
+

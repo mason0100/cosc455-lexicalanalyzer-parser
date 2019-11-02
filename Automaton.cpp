@@ -49,6 +49,8 @@ void Automaton::tokenizeFile(string line, int lineNumber, bool &error) {
 			case '-':
 			case '*':
 			case '_':
+			case '(':
+			case ')':
 				test = isSingleCharKeyword(line, start, read);
 				evaluateKeyword(test, line, lineNumber, start, read, error);
 				break;
@@ -194,7 +196,7 @@ bool Automaton::isCommentSymbol(string line, int& start, int& read) {
 bool Automaton::isSingleCharKeyword(string line, int& start, int& read) {
 	char token = line.at(start);
 
-	if (token == '=' || token == '<' || token == '+' || token == '-' || token == '*' || token == '/' || token == '_') {
+	if (token == '=' || token == '<' || token == '+' || token == '-' || token == '*' || token == '/' || token == '_' || token == '(' || token == ')') {
 		return true;
 	}
 	return false;
