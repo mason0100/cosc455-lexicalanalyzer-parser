@@ -30,18 +30,23 @@ private:
 	const string NOT = "not";
 	const string TRUE = "true";
 	const string FALSE = "false";
+	const string OPEN_PARENTHESES = "(";
+	const string CLOSE_PARENTHESES = ")";
+
 
 	//Single character keywords
 	const string EQUALS = "=";
 	const string LESSTHAN = "<";
 	const string PLUS = "+";
 	const string MINUS = "-";
-	const string STAR = "*";
-	const string SLASH = "/";
+	const string TIMES = "*";
+	const string DIVIDE = "/";
 	const string UNDERSCORE = "_";
 
 	//Functions for Parser evaluation
-	void expression();
+public:
+	bool expression();
+private:
 	void booleanExpression();
 	void booleanTerm();
 	void booleanFactor();

@@ -8,28 +8,99 @@ Parser::Parser(Token& temp) {
 
 //function to be called in Main
 //returns true if accept boolean is true
-void Parser::expression() {
-	return booleanExpression();
+bool Parser::expression() {
+	booleanExpression();
+	if (acceptBool == true) {
+		return true;
+	}
+	return false;
 }
 
 //Evaluates a boolean expression 
 void Parser::booleanExpression() {
 	booleanTerm();
-	while (tokenPtr->kind.compareTo(OR)) {
+	while (tokenPtr->kind().compare(OR) == 0) {
 		tokenPtr->next();
+		booleanTerm();
 	}
 	//neds to be finished
 }
 
 
-//Returns true is token id of type ID
-void Parser::identrifier() {
-	if (tokenPtr->kind() == ID) {
-		//true
-		//this needs to be changed to make work properly
+//Evaluates booleanTerm
+void Parser::booleanTerm() {
+	booleanFactor();
+	while (tokenPtr->kind().compare(AND) == 0) {
+		tokenPtr->next();
+		booleanFactor();
 	}
-	//else false
 }
+
+
+//Evaluates booleanFactor
+void Parser::booleanFactor() {
+	if (tokenPtr->kind().compare(NOT) == 0) {
+		tokenPtr->next();
+	}
+	arithmeticExpression();
+	if (tokenPtr->kind().compare(EQUALS) == 0 || tokenPtr->kind().compare(LESSTHAN) == 0) {
+		tokenPtr->next();
+		arithmeticExpression();
+	}
+}
+
+
+//Evaluates aritmeticExpression
+void Parser::arithmeticExpression() {
+	term();
+	while (tokenPtr->kind().compare(PLUS) == 0 || tokenPtr->kind().compare(MINUS) == 0) {
+		tokenPtr->next();
+		term();
+	}
+}
+
+
+//Evaluates term
+void Parser::term() {
+	factor();
+	while (tokenPtr->kind().compare(TIMES) == 0 || tokenPtr->kind().compare(DIVIDE) == 0) {
+		tokenPtr->next();
+		factor();
+	}
+}
+
+
+//Evaluates factor
+void Parser::factor() {
+	if (tokenPtr->kind().compare(TRUE) == 0 || tokenPtr->kind().compare(FALSE) == 0 || tokenPtr->kind().compare(NUM) == 0) {
+		literal();
+	}
+	else if (tokenPtr->kind().compare(ID) == 0) {
+		tokenPtr->next();
+	}
+	else if (tokenPtr->kind().compare(OPEN_PARENTHESES) == 0) {
+		tokenPtr->next();
+		expression();
+		accept(CLOSE_PARENTHESES);
+	}
+	else {
+		//mark as a syntax error
+		acceptBool = false;
+	}
+}
+
+
+//Evaluates literal
+void Parser::literal() {
+	if (tokenPtr->kind().compare(TRUE) == 0 || tokenPtr->kind().compare(TRUE) == 0 || tokenPtr->kind().compare(NUM) == 0) {
+		tokenPtr->next();
+	}
+	else {
+		//mark as error
+		acceptBool = false;
+	}
+}
+
 
 
 //***helper Functions***
@@ -42,9 +113,9 @@ Token::token Parser::nextToken() {
 
 //
 void Parser::accept(string temp) {
-	if (tokenPtr->kind.compareTo(temp) == 0) {
-		//not sure whether to just check for a syntax error 
-		//or to check incremend the current token to be evaluated
+	if (tokenPtr->kind().compare(temp) == 0) {
+		tokenPtr->next();
+		
 	}
 	else {
 		acceptBool = false;
