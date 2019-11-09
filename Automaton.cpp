@@ -221,7 +221,11 @@ bool Automaton::isSingleMuliCharKeyword(string line, int& start, int& read) {
 			if (read == line.size() - 1) {
 				return true;
 			}
-			if (line.size() > peak && line.at(peak) == ' ') {
+			if (line.size() > peak) {
+				if(line.at(peak) == ' ' || line.at(peak) == '=' || line.at(peak) == '<' 
+					|| line.at(peak) == '+' || line.at(peak) == '-' || line.at(peak) == '*' 
+					|| line.at(peak) == '/' || line.at(peak) == '_' || line.at(peak) == '(' 
+					|| line.at(peak) == ')')
 				return true;
 			}
 		}

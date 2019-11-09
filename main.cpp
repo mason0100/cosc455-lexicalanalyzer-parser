@@ -12,14 +12,14 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	
-	//if (argc != 2) {
-	//	cout << "Parameters not entered correctley" << endl;
-	//	return -1;
-	//}
+	if (argc != 2) {
+		cout << "Parameters not entered correctley" << endl;
+		return -1;
+	}
 
-	//string fileName = argv[1];
+	string fileName = argv[1];
 	
-	string fileName = "example.txt";
+	//string fileName = "example.txt";
 
 	//determins if Scanner evaluates true or false
 	bool error = false;
@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
 	
 	Parser x = Parser(token);
 
-	token.next();
-	bool result = x.expression();
+	
+	bool result = x.startEvaluation();
 	
 	if (result == true) {
 		cout << "File has passed the syntax test." << endl;

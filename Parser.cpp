@@ -6,24 +6,32 @@ Parser::Parser(Token& temp) {
 }
 
 
-//function to be called in Main
-//returns true if accept boolean is true
-bool Parser::expression() {
-	booleanExpression();
-	if (acceptBool == true) {
+//Driver Functions
+bool Parser::startEvaluation() {
+	tokenPtr->next();
+	expression();
+	if (acceptBool == true && tokenPtr->kind() == END) {
 		return true;
 	}
 	return false;
+
+}
+
+
+//function to be called in Main
+//returns true if accept boolean is true
+void Parser::expression() {
+	booleanExpression();
 }
 
 //Evaluates a boolean expression 
 void Parser::booleanExpression() {
 	booleanTerm();
 	while (tokenPtr->kind().compare(OR) == 0) {
+		cout << "Current TOken : " + tokenPtr->kind() << endl;//****************************DELETE
 		tokenPtr->next();
 		booleanTerm();
 	}
-	//neds to be finished
 }
 
 
@@ -31,6 +39,7 @@ void Parser::booleanExpression() {
 void Parser::booleanTerm() {
 	booleanFactor();
 	while (tokenPtr->kind().compare(AND) == 0) {
+		cout << "Current TOken : " + tokenPtr->kind() << endl;//****************************DELETE
 		tokenPtr->next();
 		booleanFactor();
 	}
@@ -86,18 +95,20 @@ void Parser::factor() {
 	else {
 		//mark as a syntax error
 		acceptBool = false;
+	
 	}
 }
 
 
 //Evaluates literal
 void Parser::literal() {
-	if (tokenPtr->kind().compare(TRUE) == 0 || tokenPtr->kind().compare(TRUE) == 0 || tokenPtr->kind().compare(NUM) == 0) {
+	if (tokenPtr->kind().compare(TRUE) == 0 || tokenPtr->kind().compare(FALSE) == 0 || tokenPtr->kind().compare(NUM) == 0) {
 		tokenPtr->next();
 	}
 	else {
 		//mark as error
 		acceptBool = false;
+	
 	}
 }
 
@@ -119,5 +130,6 @@ void Parser::accept(string temp) {
 	}
 	else {
 		acceptBool = false;
+		cout << "error in accept" << tokenPtr->position() << endl;
 	}
 }

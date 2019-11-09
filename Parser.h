@@ -11,6 +11,9 @@ public:
 	//constructor
 	Parser(Token &temp);
 
+	//Driver Functions
+	bool startEvaluation();
+
 private:
 
 	//pointer for token object
@@ -42,11 +45,12 @@ private:
 	const string TIMES = "*";
 	const string DIVIDE = "/";
 	const string UNDERSCORE = "_";
-
-	//Functions for Parser evaluation
-public:
-	bool expression();
-private:
+	
+	//Private functions for evaluations
+	//Expression will be called by driver
+	//All functions, including expression, will be called in some manner
+	//by the funcitons below
+	void expression();
 	void booleanExpression();
 	void booleanTerm();
 	void booleanFactor();
